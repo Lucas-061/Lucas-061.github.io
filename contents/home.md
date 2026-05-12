@@ -12,5 +12,4 @@ Email: hengtan061@163.com
 电子信息工程,NEU, 2023—2027
 
 #### Research Interests
-Machine Learning for Seismology; Foundation Model; Observational Seismology; Microseismic Monitoring
-
+嵌入式系统设计;单片机应用开发;数字电路与逻辑设计;信号处理与采集;硬件电路设计与PCB Layout
