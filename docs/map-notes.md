@@ -67,7 +67,92 @@ Field guide:
 
 ## Adding Another City In Code
 
-1. Put the city map image under `static/map/images/`, for example `static/map/images/beijing.svg` or `static/map/images/beijing.jpeg`.
+Only data files need to change. Do not add city-specific HTML in `index.html`; the city tabs are generated from `static/data/maps/map-library.json`.
+
+1. Put the city map image under `static/map/images/`.
+
+Example:
+
+```text
+static/map/images/beijing.jpeg
+```
+
 2. Add a city entry to `static/data/maps/map-library.json`.
-3. Add marker notes to `static/data/maps/map-notes.json` with the same `mapId`.
+
+Example:
+
+```json
+{
+  "id": "beijing",
+  "name": "北京",
+  "src": "static/map/images/beijing.jpeg",
+  "builtin": true,
+  "notesFile": "static/data/maps/map-notes.json"
+}
+```
+
+Important:
+
+- `id` must be unique.
+- `id` should use lowercase English letters, numbers, or hyphens.
+- `src` must point to the image file under `static/map/images/`.
+
+3. Add marker notes to `static/data/maps/map-notes.json`.
+
+Example:
+
+```json
+{
+  "id": "note-beijing-001",
+  "mapId": "beijing",
+  "x": 50,
+  "y": 50,
+  "title": "示例地点",
+  "body": "这里写 Markdown 文章内容。\n\n",
+  "updatedAt": 1785477000000
+}
+```
+
+Important:
+
+- `mapId` must exactly match the city `id` in `map-library.json`.
+- `x` and `y` are percentages on that map image.
+- Keep `id` stable after a note is published.
+
 4. Update this document with a new city section and marker table.
+
+Use this template:
+
+```md
+## City: 北京
+
+Map ID: `beijing`
+
+Map image: `static/map/images/beijing.jpeg`
+
+Notes file: `static/data/maps/map-notes.json`
+
+| Marker | Position | Article Summary | Note ID |
+| --- | --- | --- | --- |
+| 示例地点 | `x: 50.00%`, `y: 50.00%` | 这里写摘要 | `note-beijing-001` |
+```
+
+## Adding A Marker To An Existing City
+
+1. Find the target city `id` in `static/data/maps/map-library.json`.
+2. Add a new note object to `static/data/maps/map-notes.json`.
+3. Set the note's `mapId` to that city `id`.
+4. Set `x` and `y` from the website export, or estimate them as image percentages.
+5. Add the marker row to this document.
+
+For example, adding a new Shanghai marker must use:
+
+```json
+"mapId": "shanghai"
+```
+
+because Shanghai's city entry uses:
+
+```json
+"id": "shanghai"
+```

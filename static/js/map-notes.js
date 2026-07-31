@@ -167,10 +167,11 @@
         const importInput = root.querySelector('[data-action="import"]');
 
         let maps = await loadMaps();
-        let activeMapId = localStorage.getItem(activeMapStorageKey) || builtinMap.id;
+        const defaultMapId = maps[0]?.id || builtinMap.id;
+        let activeMapId = localStorage.getItem(activeMapStorageKey) || defaultMapId;
         let notes = await loadNotes();
-        if (!maps.some(mapItem => mapItem.id === activeMapId)) activeMapId = builtinMap.id;
-        if (!notes.some(note => note.mapId === activeMapId)) activeMapId = builtinMap.id;
+        if (!maps.some(mapItem => mapItem.id === activeMapId)) activeMapId = defaultMapId;
+        if (!notes.some(note => note.mapId === activeMapId)) activeMapId = defaultMapId;
         localStorage.setItem(activeMapStorageKey, activeMapId);
         saveNotes(notes);
         let activeId = notes.find(note => note.mapId === activeMapId)?.id || null;

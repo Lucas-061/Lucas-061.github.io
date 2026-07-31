@@ -7,11 +7,10 @@
     "notesFile": "static/data/maps/map-notes.json"
   },
   {
-    "id": "sahnghai",
+    "id": "shanghai",
     "name": "上海",
     "src": "static/map/images/shanghai.jpeg",
     "builtin": true,
     "notesFile": "static/data/maps/map-notes.json"
-  
   }
 ]
