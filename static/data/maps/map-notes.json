@@ -46,6 +46,7 @@
   },
 
 
+
   {
   "id": "note-shanghai-001",
   "mapId": "shanghai",
@@ -74,6 +75,15 @@
   "y": 56.81,
   "title": "三中",
   "body": "青三\n\n",
+  "updatedAt": 1785477000001
+  },
+  {
+  "id": "note-nanning-002",
+  "mapId": "nanning",
+  "x": 31.10,
+  "y": 46.49,
+  "title": "邕味老友",
+  "body": "猪杂老友粉值得一试\n\n",
   "updatedAt": 1785477000001
   }
 ]

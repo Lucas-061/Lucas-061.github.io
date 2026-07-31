@@ -52,7 +52,7 @@ Notes file: `static/data/maps/map-notes.json`
 | Marker | Position | Article Summary | Note ID |
 | --- | --- | --- | --- |
 | 三中 | `x: 53.77%`, `y: 56.81%` | 青三 | `note-nanning-001` |
-
+| 邕味老友 | `x: 31.10%`, `y: 46.49%` | 猪杂老友粉值得一试 | `note-nanning-002` |
 
 ## Note Data Shape
 
