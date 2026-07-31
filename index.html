@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Academic Webpage" />
-    <meta name="author" content="senli1073" />
+    <meta name="description" content="Personal Webpage" />
+    <meta name="author" content="Lucas-061" />
     <title id="title"></title>
 
     <!-- Icon -->
@@ -94,13 +94,10 @@
                         <a class="nav-link me-lg-3" href="#page-top">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link me-lg-3" href="#projects">PROJECTS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#awards">AWARDS</a>
+                        <a class="nav-link me-lg-3" href="#map-notes">MAP NOTES</a>
                     </li>
 
                 </ul>
@@ -138,18 +135,6 @@
     </section>
     <!-- Home -->
 
-    <!-- Publications -->
-    <section class="bg-gradient-primary-to-secondary-gray mt5 md5" id="publications">
-        <div class="container px-5">
-            <header>
-                <h2 id="publications-subtitle"><i class="bi bi-file-text-fill"></i>&nbsp;PUBLICATIONS</h2>
-            </header>
-            <div class="main-body" id="publications-md"></div>
-
-        </div>
-    </section>
-    <!-- Publications  -->
-
     <!-- Projects -->
     <section class="bg-gradient-primary-to-secondary-gray mt5 md5" id="projects">
         <div class="container px-5">
@@ -161,17 +146,78 @@
     </section>
     <!-- Projects -->
 
-    <!-- Awards -->
-    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="awards">
+    <!-- Map Notes -->
+    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="map-notes">
         <div class="container px-5">
             <header>
-                <h2 id="awards-subtitle"><i class="bi bi-award-fill"></i>AWARDS </h2>
+                <h2 id="map-notes-subtitle"><i class="bi bi-geo-alt-fill"></i>&nbsp;MAP NOTES</h2>
             </header>
-            <div class="main-body" id="awards-md"></div>
-
+            <div class="map-notes-shell" data-map-notes>
+                <div class="map-notes-map-panel">
+                    <div class="map-library-bar">
+                        <div class="map-city-tabs" data-map-tabs aria-label="City maps"></div>
+                        <button class="map-note-button" type="button" data-action="add-map" title="Add city map">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                    <div class="map-add-form" data-map-form hidden>
+                        <input type="text" data-map-name placeholder="City name">
+                        <input type="file" data-map-file accept="image/*,.svg">
+                        <button class="map-note-button text-button" type="button" data-action="save-map">Add</button>
+                        <button class="map-note-button text-button" type="button" data-action="cancel-map">Cancel</button>
+                    </div>
+                    <div class="map-notes-toolbar" aria-label="Map note actions">
+                        <button class="map-note-button" type="button" data-action="new" title="New note">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                        <button class="map-note-button" type="button" data-action="zoom-in" title="Zoom in">
+                            <i class="bi bi-zoom-in"></i>
+                        </button>
+                        <button class="map-note-button" type="button" data-action="zoom-out" title="Zoom out">
+                            <i class="bi bi-zoom-out"></i>
+                        </button>
+                        <button class="map-note-button" type="button" data-action="zoom-reset" title="Reset map view">
+                            <i class="bi bi-arrows-fullscreen"></i>
+                        </button>
+                        <button class="map-note-button" type="button" data-action="export" title="Export notes">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <label class="map-note-button" title="Import notes">
+                            <i class="bi bi-upload"></i>
+                            <input class="visually-hidden" type="file" accept="application/json" data-action="import">
+                        </label>
+                    </div>
+                    <div class="offline-map" data-map aria-label="Fuzhou offline map image for choosing note points">
+                        <div class="offline-map-canvas" data-map-canvas>
+                            <img class="offline-map-image" data-map-image src="static/map/fuzhou.jpeg" alt="Fuzhou offline map">
+                            <div class="map-note-markers" data-markers></div>
+                        </div>
+                    </div>
+                    <div class="map-note-list" data-list></div>
+                </div>
+                <article class="map-note-editor" data-editor>
+                    <div class="map-note-empty" data-empty>Select a point or click the map to begin.</div>
+                    <div class="map-note-form" data-form hidden>
+                        <div class="map-note-meta">
+                            <input type="text" data-title placeholder="Note title">
+                            <button class="map-note-button danger" type="button" data-action="delete" title="Delete note">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                        <div class="map-note-coordinates" data-coordinates></div>
+                        <textarea data-body spellcheck="true" placeholder="Write with Markdown. Paste an image directly here."></textarea>
+                        <div class="map-note-actions">
+                            <span data-save-state>Saved locally</span>
+                            <button class="map-note-button text-button" type="button" data-action="preview">Preview</button>
+                            <button class="map-note-button text-button" type="button" data-action="edit">Edit</button>
+                        </div>
+                        <div class="map-note-preview main-body" data-preview hidden></div>
+                    </div>
+                </article>
+            </div>
         </div>
     </section>
-    <!-- Awards -->
+    <!-- Map Notes -->
 
 
     <!-- Footer-->
@@ -179,13 +225,12 @@
         <div class="container px-5">
             <div class="text-white-50 small">
                 <div id="copyright-text" class="mb-2"></div>
-                <a id="github-link" href="https://github.com/senli1073">Github</a>
-                <span class="mx-1">&middot;</span>
-                <a id="license-link" href="https://github.com/senli1073/senli1073.github.io/blob/main/LICENSE">License</a>
+                <a id="github-link" href="https://github.com/Lucas-061">Github</a>
             </div>
         </div>
     </footer>
 
+    <script type="text/javascript" src="static/js/map-notes.js"></script>
 </body>
 
 </html>

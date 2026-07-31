@@ -109,4 +109,338 @@ section .main-body{
     }
 }
 
+.map-notes-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.map-notes-map-panel,
+.map-note-editor {
+    min-width: 0;
+}
+
+.map-library-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.map-city-tabs {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.map-city-tab {
+    min-height: 2.5rem;
+    padding: 0 0.95rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.45rem;
+    background: #ffffff;
+    color: #344054;
+    font-weight: 700;
+}
+
+.map-city-tab.active {
+    border-color: var(--bs-blue);
+    background: #eef3ff;
+    color: var(--bs-blue);
+}
+
+.map-add-form {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(12rem, 1.4fr) auto auto;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.map-add-form input[type="text"],
+.map-add-form input[type="file"] {
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.4rem;
+    background: #ffffff;
+}
+
+.map-notes-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.map-note-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.4rem;
+    background: #ffffff;
+    color: #1d2f6f;
+    line-height: 1;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.map-note-button:hover,
+.map-note-button:focus {
+    border-color: var(--bs-blue);
+    background: #eef3ff;
+    color: var(--bs-blue);
+}
+
+.map-note-button.danger {
+    color: #b42318;
+}
+
+.map-note-button.danger:hover,
+.map-note-button.danger:focus {
+    border-color: #f1a7a0;
+    background: #fff1f0;
+    color: #b42318;
+}
+
+.map-note-button.text-button {
+    width: auto;
+    min-width: 4.5rem;
+    padding: 0 0.95rem;
+    font-size: 0.95rem;
+}
+
+.offline-map {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4591 / 3188;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.5rem;
+    background: #d7e5ed;
+    cursor: crosshair;
+    box-shadow: 0 1rem 2.5rem rgba(22, 34, 70, 0.08);
+    touch-action: none;
+}
+
+.offline-map::after {
+    content: attr(data-zoom);
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 3;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid rgba(92, 113, 139, 0.26);
+    border-radius: 0.35rem;
+    background: rgba(255, 255, 255, 0.82);
+    color: #344054;
+    font-size: 0.78rem;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.offline-map:active {
+    cursor: grabbing;
+}
+
+.offline-map-canvas {
+    position: absolute;
+    inset: 0;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+.offline-map-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.map-note-markers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.map-note-marker {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    background: transparent;
+    color: #d12f1f;
+    font-size: 1.7rem;
+    line-height: 1;
+    transform: translate(-50%, -88%);
+    pointer-events: auto;
+}
+
+.map-note-marker.active {
+    color: var(--bs-blue);
+    filter: drop-shadow(0 0.25rem 0.35rem rgba(41, 55, 240, 0.28));
+}
+
+.map-note-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 0.7rem;
+    margin-top: 0.9rem;
+}
+
+.map-note-list-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-height: 4.25rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid #d6dde7;
+    border-radius: 0.45rem;
+    background: #ffffff;
+    color: #1f2937;
+    text-align: left;
+}
+
+.map-note-list-item strong {
+    overflow: hidden;
+    font-size: 0.98rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.map-note-list-item span {
+    color: #687387;
+    font-size: 0.82rem;
+}
+
+.map-note-list-item.active {
+    border-color: var(--bs-blue);
+    box-shadow: inset 3px 0 0 var(--bs-blue);
+}
+
+.map-note-editor {
+    display: flex;
+    min-height: 36rem;
+    padding: 1rem;
+    border: 1px solid #d6dde7;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    box-shadow: 0 1rem 2.5rem rgba(22, 34, 70, 0.06);
+}
+
+.map-note-form {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.map-note-empty {
+    display: grid;
+    width: 100%;
+    place-items: center;
+    color: #687387;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.map-note-meta {
+    display: flex;
+    gap: 0.7rem;
+}
+
+.map-note-meta input {
+    flex: 1;
+    min-width: 0;
+    height: 2.5rem;
+    padding: 0 0.85rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.4rem;
+    font-weight: 700;
+}
+
+.map-note-coordinates {
+    color: #687387;
+    font-size: 0.9rem;
+}
+
+.map-note-form textarea {
+    flex: 1;
+    min-height: 19rem;
+    padding: 0.9rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.4rem;
+    font: 0.98rem/1.65 Consolas, "Liberation Mono", monospace;
+    resize: vertical;
+}
+
+.map-note-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.map-note-actions span {
+    margin-right: auto;
+    color: #687387;
+    font-size: 0.85rem;
+}
+
+.map-note-preview {
+    flex: 1;
+    overflow: auto;
+    min-height: 19rem;
+    padding: 1rem;
+    border: 1px solid #c8d2e1;
+    border-radius: 0.4rem;
+    background: #fbfcff;
+}
+
+.map-note-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.35rem;
+}
+
+@media screen and (max-width: 991px) {
+    .map-notes-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .map-add-form {
+        grid-template-columns: 1fr;
+    }
+
+    .map-note-editor {
+        min-height: 30rem;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .map-note-list {
+        grid-template-columns: 1fr;
+    }
+
+    .map-note-actions {
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    .map-note-actions span {
+        flex-basis: 100%;
+    }
+}
+
 
