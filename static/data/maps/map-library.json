@@ -1,0 +1,9 @@
+[
+  {
+    "id": "fuzhou",
+    "name": "福州",
+    "src": "static/map/images/fuzhou.jpeg",
+    "builtin": true,
+    "notesFile": "static/data/maps/map-notes.json"
+  }
+]

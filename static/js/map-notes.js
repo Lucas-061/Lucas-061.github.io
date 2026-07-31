@@ -2,11 +2,13 @@
     const storageKey = 'lucas-map-notes-image-v1';
     const mapStorageKey = 'lucas-map-library-v1';
     const activeMapStorageKey = 'lucas-active-map-v1';
+    const bundledMapsFile = 'static/data/maps/map-library.json';
+    const bundledNotesFile = 'static/data/maps/map-notes.json';
     const legacyKeys = ['lucas-map-notes-v2', 'lucas-map-notes-v1'];
     const builtinMap = {
         id: 'fuzhou',
         name: '福州',
-        src: 'static/map/fuzhou.jpeg',
+        src: 'static/map/images/fuzhou.jpeg',
         builtin: true
     };
     const defaultNote = {
@@ -23,21 +25,75 @@
         return Math.max(min, Math.min(max, value));
     }
 
-    function loadNotes() {
+    async function loadNotes() {
         try {
             const raw = localStorage.getItem(storageKey) || legacyKeys.map(key => localStorage.getItem(key)).find(Boolean);
+            const bundledNotes = await loadBundledNotes();
+            if (!raw) return bundledNotes;
             const parsed = JSON.parse(raw);
+            const localNotes = Array.isArray(parsed) && parsed.length ? parsed.map(normalizeNote) : [];
+            return mergeNotes(localNotes, bundledNotes);
+        } catch {
+            return loadBundledNotes();
+        }
+    }
+
+    async function loadBundledNotes() {
+        try {
+            const response = await fetch(bundledNotesFile);
+            if (!response.ok) throw new Error('No bundled map notes');
+            const parsed = await response.json();
             return Array.isArray(parsed) && parsed.length ? parsed.map(normalizeNote) : [defaultNote];
         } catch {
             return [defaultNote];
         }
     }
 
-    function loadMaps() {
+    function mergeNotes(localNotes, bundledNotes) {
+        const merged = [];
+        bundledNotes.forEach(note => upsertNote(merged, note, false));
+        localNotes.forEach(note => upsertNote(merged, note, true));
+        return merged;
+    }
+
+    function upsertNote(notes, incoming, preferIncoming) {
+        const index = notes.findIndex(note => isSameNote(note, incoming));
+        if (index === -1) {
+            notes.push(incoming);
+            return;
+        }
+        notes[index] = preferIncoming ? incoming : notes[index];
+    }
+
+    function isSameNote(a, b) {
+        if (a.id === b.id) return true;
+        if (a.mapId !== b.mapId) return false;
+        const sameTitle = (a.title || '').trim() === (b.title || '').trim();
+        const closePosition = Math.abs(a.x - b.x) < 0.25 && Math.abs(a.y - b.y) < 0.25;
+        return sameTitle && closePosition;
+    }
+
+    async function loadMaps() {
+        const bundledMaps = await loadBundledMaps();
         try {
             const parsed = JSON.parse(localStorage.getItem(mapStorageKey));
             const customMaps = Array.isArray(parsed) ? parsed.map(normalizeMap).filter(Boolean) : [];
-            return [builtinMap].concat(customMaps.filter(map => map.id !== builtinMap.id));
+            const customIds = new Set(customMaps.map(map => map.id));
+            return bundledMaps
+                .filter(map => !customIds.has(map.id))
+                .concat(customMaps);
+        } catch {
+            return bundledMaps;
+        }
+    }
+
+    async function loadBundledMaps() {
+        try {
+            const response = await fetch(bundledMapsFile);
+            if (!response.ok) throw new Error('No bundled maps');
+            const parsed = await response.json();
+            const maps = Array.isArray(parsed) ? parsed.map(normalizeMap).filter(Boolean) : [];
+            return maps.length ? maps : [builtinMap];
         } catch {
             return [builtinMap];
         }
@@ -88,7 +144,7 @@
         textarea.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
         const root = document.querySelector('[data-map-notes]');
         if (!root) return;
 
@@ -110,10 +166,13 @@
         const saveState = root.querySelector('[data-save-state]');
         const importInput = root.querySelector('[data-action="import"]');
 
-        let maps = loadMaps();
+        let maps = await loadMaps();
         let activeMapId = localStorage.getItem(activeMapStorageKey) || builtinMap.id;
-        let notes = loadNotes();
+        let notes = await loadNotes();
         if (!maps.some(mapItem => mapItem.id === activeMapId)) activeMapId = builtinMap.id;
+        if (!notes.some(note => note.mapId === activeMapId)) activeMapId = builtinMap.id;
+        localStorage.setItem(activeMapStorageKey, activeMapId);
+        saveNotes(notes);
         let activeId = notes.find(note => note.mapId === activeMapId)?.id || null;
         let previewMode = false;
         let mapScale = 1;
