@@ -37,7 +37,7 @@ Notes file: `static/data/maps/map-notes.json`
 | Marker | Position | Article Summary | Note ID |
 | --- | --- | --- | --- |
 | 外滩 | `x: 48.24%`, `y: 39.43%` | 做最优质的战士 | `note-shanghai-001` |
-
+| 菜饭骨头汤 | `x: 85.60%`, `y: 66.26%` | 鸡腿饭绝了 | `note-shanghai-002` |
 
 ## Note Data Shape
 

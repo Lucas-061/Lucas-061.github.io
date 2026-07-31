@@ -53,6 +53,15 @@
   "y": 39.43,
   "title": "外滩",
   "body": "做最优质的战士\n\n",
-  "updatedAt": 1785477000000
+  "updatedAt": 1785477000001
+  },
+  {
+  "id": "note-shanghai-002",
+  "mapId": "shanghai",
+  "x": 85.60,
+  "y": 66.26,
+  "title": "菜饭骨头汤",
+  "body": "鸡腿饭绝了\n\n",
+  "updatedAt": 1785477000002
   }
 ]
