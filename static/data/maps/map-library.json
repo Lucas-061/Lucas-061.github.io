@@ -5,5 +5,13 @@
     "src": "static/map/images/fuzhou.jpeg",
     "builtin": true,
     "notesFile": "static/data/maps/map-notes.json"
+  },
+  {
+    "id": "sahnghai",
+    "name": "上海",
+    "src": "static/map/images/shanghai.jpeg",
+    "builtin": true,
+    "notesFile": "static/data/maps/map-notes.json"
+  
   }
 ]

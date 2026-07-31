@@ -26,6 +26,19 @@ Notes file: `static/data/maps/map-notes.json`
 | 乌龙江湿地公园 | `x: 26.20%`, `y: 57.17%` | 还行，跑道很长 | `note-1785476522863-989` |
 | 旗山湖公园 | `x: 8.88%`, `y: 49.42%` | 逛了一圈 | `note-1785476597952-918` |
 
+## City: 上海
+
+Map ID: `shanghai`
+
+Map image: `static/map/images/shanghai.jpeg`
+
+Notes file: `static/data/maps/map-notes.json`
+
+| Marker | Position | Article Summary | Note ID |
+| --- | --- | --- | --- |
+| 外滩 | `x: 48.24%`, `y: 39.43%` | 做最优质的战士 | `note-shanghai-001` |
+
+
 ## Note Data Shape
 
 Each marker in `static/data/maps/map-notes.json` uses this shape:
