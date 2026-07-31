@@ -12,5 +12,12 @@
     "src": "static/map/images/shanghai.jpeg",
     "builtin": true,
     "notesFile": "static/data/maps/map-notes.json"
-  }
+  },
+  {
+    "id": "nanning",
+    "name": "南宁",
+    "src": "static/map/images/nanning.jpeg",
+    "builtin": true,
+    "notesFile": "static/data/maps/map-notes.json"
+  }  
 ]

@@ -20,11 +20,12 @@ Notes file: `static/data/maps/map-notes.json`
 
 | Marker | Position | Article Summary | Note ID |
 | --- | --- | --- | --- |
-| 西湖公园 | `x: 43.93%`, `y: 18.24%` | 好玩，成功抓拍小鹅展翅 | `note-1785476330067-444` |
-| 免费运动场 | `x: 15.89%`, `y: 46.79%` | 定时免费 | `note-1785476356027-629` |
-| 三坊七巷 | `x: 46.59%`, `y: 24.39%` | 榕树 | `note-1785476429089-182` |
-| 乌龙江湿地公园 | `x: 26.20%`, `y: 57.17%` | 还行，跑道很长 | `note-1785476522863-989` |
-| 旗山湖公园 | `x: 8.88%`, `y: 49.42%` | 逛了一圈 | `note-1785476597952-918` |
+| 西湖公园 | `x: 43.93%`, `y: 18.24%` | 好玩，成功抓拍小鹅展翅 | `note-fuzhou-001` |
+| 免费运动场 | `x: 15.89%`, `y: 46.79%` | 定时免费 | `note-fuzhou-002` |
+| 三坊七巷 | `x: 46.59%`, `y: 24.39%` | 榕树 | `note-fuzhou-003` |
+| 乌龙江湿地公园 | `x: 26.20%`, `y: 57.17%` | 还行，跑道很长 | `note-fuzhou-004` |
+| 旗山湖公园 | `x: 8.88%`, `y: 49.42%` | 逛了一圈 | `note-fuzhou-005` |
+
 
 ## City: 上海
 
@@ -38,6 +39,20 @@ Notes file: `static/data/maps/map-notes.json`
 | --- | --- | --- | --- |
 | 外滩 | `x: 48.24%`, `y: 39.43%` | 做最优质的战士 | `note-shanghai-001` |
 | 菜饭骨头汤 | `x: 85.60%`, `y: 66.26%` | 鸡腿饭绝了 | `note-shanghai-002` |
+
+
+## City: 南宁
+
+Map ID: `nanning`
+
+Map image: `static/map/images/nanning.jpeg`
+
+Notes file: `static/data/maps/map-notes.json`
+
+| Marker | Position | Article Summary | Note ID |
+| --- | --- | --- | --- |
+| 三中 | `x: 53.77%`, `y: 56.81%` | 青三 | `note-nanning-001` |
+
 
 ## Note Data Shape
 
