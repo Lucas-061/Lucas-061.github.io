@@ -1,24 +1,13 @@
 (function () {
-    const storageKey = 'lucas-map-notes-image-v1';
     const mapStorageKey = 'lucas-map-library-v1';
     const activeMapStorageKey = 'lucas-active-map-v1';
     const bundledMapsFile = 'static/data/maps/map-library.json';
     const bundledNotesFile = 'static/data/maps/map-notes.json';
-    const legacyKeys = ['lucas-map-notes-v2', 'lucas-map-notes-v1'];
     const builtinMap = {
         id: 'fuzhou',
         name: '福州',
         src: 'static/map/images/fuzhou.jpeg',
         builtin: true
-    };
-    const defaultNote = {
-        id: 'sample-note',
-        mapId: builtinMap.id,
-        x: 54,
-        y: 39,
-        title: 'Example note',
-        body: '# 福州地图笔记\n\n点击地图可以添加标记点。每个点都可以写 Markdown 文章，也可以直接粘贴图片。后续添加城市地图时可以上传 PNG、JPG 或 SVG。',
-        updatedAt: Date.now()
     };
 
     function clamp(value, min, max) {
@@ -27,50 +16,13 @@
 
     async function loadNotes() {
         try {
-            const raw = localStorage.getItem(storageKey) || legacyKeys.map(key => localStorage.getItem(key)).find(Boolean);
-            const bundledNotes = await loadBundledNotes();
-            if (!raw) return bundledNotes;
-            const parsed = JSON.parse(raw);
-            const localNotes = Array.isArray(parsed) && parsed.length ? parsed.map(normalizeNote) : [];
-            return mergeNotes(localNotes, bundledNotes);
-        } catch {
-            return loadBundledNotes();
-        }
-    }
-
-    async function loadBundledNotes() {
-        try {
             const response = await fetch(bundledNotesFile);
             if (!response.ok) throw new Error('No bundled map notes');
             const parsed = await response.json();
-            return Array.isArray(parsed) && parsed.length ? parsed.map(normalizeNote) : [defaultNote];
+            return Array.isArray(parsed) ? parsed.map(normalizeNote).filter(Boolean) : [];
         } catch {
-            return [defaultNote];
+            return [];
         }
-    }
-
-    function mergeNotes(localNotes, bundledNotes) {
-        const merged = [];
-        bundledNotes.forEach(note => upsertNote(merged, note, false));
-        localNotes.forEach(note => upsertNote(merged, note, true));
-        return merged;
-    }
-
-    function upsertNote(notes, incoming, preferIncoming) {
-        const index = notes.findIndex(note => isSameNote(note, incoming));
-        if (index === -1) {
-            notes.push(incoming);
-            return;
-        }
-        notes[index] = preferIncoming ? incoming : notes[index];
-    }
-
-    function isSameNote(a, b) {
-        if (a.id === b.id) return true;
-        if (a.mapId !== b.mapId) return false;
-        const sameTitle = (a.title || '').trim() === (b.title || '').trim();
-        const closePosition = Math.abs(a.x - b.x) < 0.25 && Math.abs(a.y - b.y) < 0.25;
-        return sameTitle && closePosition;
     }
 
     async function loadMaps() {
@@ -114,6 +66,7 @@
     }
 
     function normalizeNote(note, index) {
+        if (!note || typeof note !== 'object') return null;
         const lngX = Number.isFinite(note.lng) ? ((note.lng + 180) / 360) * 100 : 50;
         const latY = Number.isFinite(note.lat) ? ((85 - note.lat) / 170) * 100 : 50;
         return {
@@ -123,25 +76,26 @@
             y: Number.isFinite(note.y) ? clamp(note.y, 0, 100) : clamp(latY, 0, 100),
             title: note.title || 'Untitled note',
             body: note.body || '',
+            previewImage: note.previewImage || '',
             updatedAt: note.updatedAt || Date.now()
         };
-    }
-
-    function saveNotes(notes) {
-        localStorage.setItem(storageKey, JSON.stringify(notes));
     }
 
     function formatCoordinate(note) {
         return `${note.x.toFixed(2)}%, ${note.y.toFixed(2)}%`;
     }
 
-    function insertText(textarea, value) {
-        const start = textarea.selectionStart || 0;
-        const end = textarea.selectionEnd || 0;
-        textarea.value = textarea.value.slice(0, start) + value + textarea.value.slice(end);
-        textarea.focus();
-        textarea.selectionStart = textarea.selectionEnd = start + value.length;
-        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    function findFirstMarkdownImage(body) {
+        const match = String(body || '').match(/!\[[^\]]*]\(([^)]+)\)/);
+        return match ? match[1].trim() : '';
+    }
+
+    function summarizeBody(body) {
+        return String(body || '')
+            .replace(/!\[[^\]]*]\([^)]+\)/g, '')
+            .replace(/[#>*_`~\-[\]()]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
@@ -157,34 +111,21 @@
         const mapFileInput = root.querySelector('[data-map-file]');
         const markerLayer = root.querySelector('[data-markers]');
         const list = root.querySelector('[data-list]');
-        const empty = root.querySelector('[data-empty]');
-        const form = root.querySelector('[data-form]');
-        const titleInput = root.querySelector('[data-title]');
-        const bodyInput = root.querySelector('[data-body]');
-        const coordinates = root.querySelector('[data-coordinates]');
-        const preview = root.querySelector('[data-preview]');
-        const saveState = root.querySelector('[data-save-state]');
-        const importInput = root.querySelector('[data-action="import"]');
+        const popup = root.querySelector('[data-note-popup]');
 
         let maps = await loadMaps();
         const defaultMapId = maps[0]?.id || builtinMap.id;
         let activeMapId = localStorage.getItem(activeMapStorageKey) || defaultMapId;
         let notes = await loadNotes();
         if (!maps.some(mapItem => mapItem.id === activeMapId)) activeMapId = defaultMapId;
-        if (!notes.some(note => note.mapId === activeMapId)) activeMapId = defaultMapId;
         localStorage.setItem(activeMapStorageKey, activeMapId);
-        saveNotes(notes);
-        let activeId = notes.find(note => note.mapId === activeMapId)?.id || null;
-        let previewMode = false;
+
+        let activeId = null;
         let mapScale = 1;
         let mapPanX = 0;
         let mapPanY = 0;
         let dragStart = null;
         let suppressNextClick = false;
-
-        function activeNote() {
-            return notes.find(note => note.id === activeId && note.mapId === activeMapId);
-        }
 
         function activeMap() {
             return maps.find(mapItem => mapItem.id === activeMapId) || builtinMap;
@@ -194,9 +135,12 @@
             return notes.filter(note => note.mapId === activeMapId);
         }
 
-        function persist(message) {
-            saveNotes(notes);
-            saveState.textContent = message || 'Saved locally';
+        function activeNote() {
+            return currentNotes().find(note => note.id === activeId) || null;
+        }
+
+        function getPreviewImage(note) {
+            return note.previewImage || findFirstMarkdownImage(note.body) || activeMap().src;
         }
 
         function renderMapTabs() {
@@ -209,8 +153,7 @@
                 button.addEventListener('click', () => {
                     activeMapId = mapItem.id;
                     localStorage.setItem(activeMapStorageKey, activeMapId);
-                    activeId = currentNotes()[0]?.id || null;
-                    previewMode = false;
+                    activeId = null;
                     resetMapView();
                     render();
                 });
@@ -222,7 +165,7 @@
             const selectedMap = activeMap();
             mapImage.src = selectedMap.src;
             mapImage.alt = `${selectedMap.name} offline map`;
-            map.setAttribute('aria-label', `${selectedMap.name} offline map image for choosing note points`);
+            map.setAttribute('aria-label', `${selectedMap.name} offline map image`);
         }
 
         function clampMapPan() {
@@ -237,6 +180,7 @@
             clampMapPan();
             mapCanvas.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapScale})`;
             map.dataset.zoom = `${Math.round(mapScale * 100)}%`;
+            positionPopup();
         }
 
         function zoomMap(nextScale, originX, originY) {
@@ -257,13 +201,6 @@
             applyMapTransform();
         }
 
-        function getMapPoint(event) {
-            const rect = map.getBoundingClientRect();
-            const x = ((event.clientX - rect.left - mapPanX) / mapScale / rect.width) * 100;
-            const y = ((event.clientY - rect.top - mapPanY) / mapScale / rect.height) * 100;
-            return { x: clamp(x, 0, 100), y: clamp(y, 0, 100) };
-        }
-
         function renderMarkers() {
             markerLayer.innerHTML = '';
             currentNotes().forEach(note => {
@@ -277,7 +214,6 @@
                 button.addEventListener('click', event => {
                     event.stopPropagation();
                     activeId = note.id;
-                    previewMode = false;
                     render();
                 });
                 markerLayer.appendChild(button);
@@ -296,28 +232,57 @@
                     button.innerHTML = `<strong>${note.title || 'Untitled note'}</strong><span>${formatCoordinate(note)}</span>`;
                     button.addEventListener('click', () => {
                         activeId = note.id;
-                        previewMode = false;
                         render();
                     });
                     list.appendChild(button);
                 });
         }
 
-        function renderEditor() {
+        function renderPopup() {
             const note = activeNote();
-            empty.hidden = Boolean(note);
-            form.hidden = !note;
-            if (!note) return;
-
-            titleInput.value = note.title || '';
-            bodyInput.value = note.body || '';
-            coordinates.textContent = formatCoordinate(note);
-            preview.hidden = !previewMode;
-            bodyInput.hidden = previewMode;
-            if (previewMode) {
-                preview.innerHTML = marked.parse(note.body || '');
-                if (window.MathJax && MathJax.typeset) MathJax.typeset([preview]);
+            if (!note) {
+                popup.hidden = true;
+                popup.replaceChildren();
+                return;
             }
+
+            const image = document.createElement('img');
+            image.src = getPreviewImage(note);
+            image.alt = note.title || 'Map note preview';
+
+            const content = document.createElement('div');
+            content.className = 'map-note-popup-content';
+
+            const title = document.createElement('strong');
+            title.textContent = note.title || 'Untitled note';
+            content.appendChild(title);
+
+            const summary = summarizeBody(note.body);
+            if (summary) {
+                const text = document.createElement('span');
+                text.textContent = summary;
+                content.appendChild(text);
+            }
+
+            popup.replaceChildren(image, content);
+            popup.hidden = false;
+            positionPopup();
+        }
+
+        function positionPopup() {
+            const note = activeNote();
+            if (!note || popup.hidden) return;
+
+            const rect = map.getBoundingClientRect();
+            const x = (note.x / 100) * rect.width * mapScale + mapPanX;
+            const y = (note.y / 100) * rect.height * mapScale + mapPanY;
+            const nearRightEdge = x > rect.width - 260;
+            const nearTopEdge = y < 130;
+
+            popup.classList.toggle('flip-x', nearRightEdge);
+            popup.classList.toggle('flip-y', nearTopEdge);
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
         }
 
         function render() {
@@ -325,25 +290,7 @@
             renderMapImage();
             renderMarkers();
             renderList();
-            renderEditor();
-        }
-
-        function createNote(x, y) {
-            const id = `note-${Date.now()}-${Math.round(Math.random() * 1000)}`;
-            const note = {
-                id,
-                mapId: activeMapId,
-                x: clamp(x, 0, 100),
-                y: clamp(y, 0, 100),
-                title: 'New place note',
-                body: '# New place note\n\n',
-                updatedAt: Date.now()
-            };
-            notes.push(note);
-            activeId = id;
-            previewMode = false;
-            persist('New point saved');
-            render();
+            renderPopup();
         }
 
         map.addEventListener('click', event => {
@@ -351,8 +298,9 @@
                 suppressNextClick = false;
                 return;
             }
-            const point = getMapPoint(event);
-            createNote(point.x, point.y);
+            if (event.target.closest('.map-note-marker') || event.target.closest('[data-note-popup]')) return;
+            activeId = null;
+            render();
         });
 
         map.addEventListener('wheel', event => {
@@ -363,7 +311,7 @@
         }, { passive: false });
 
         map.addEventListener('pointerdown', event => {
-            if (event.target.closest('.map-note-marker')) return;
+            if (event.target.closest('.map-note-marker') || event.target.closest('[data-note-popup]')) return;
             map.setPointerCapture(event.pointerId);
             dragStart = {
                 pointerId: event.pointerId,
@@ -396,41 +344,9 @@
             dragStart = null;
         });
 
-        window.addEventListener('resize', applyMapTransform);
-
-        titleInput.addEventListener('input', () => {
-            const note = activeNote();
-            if (!note) return;
-            note.title = titleInput.value;
-            note.updatedAt = Date.now();
-            persist('Title saved');
-            renderMarkers();
-            renderList();
-        });
-
-        bodyInput.addEventListener('input', () => {
-            const note = activeNote();
-            if (!note) return;
-            note.body = bodyInput.value;
-            note.updatedAt = Date.now();
-            persist('Article saved');
-            renderList();
-        });
-
-        bodyInput.addEventListener('paste', event => {
-            const files = Array.from(event.clipboardData.files || []).filter(file => file.type.startsWith('image/'));
-            if (!files.length) return;
-            event.preventDefault();
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = () => insertText(bodyInput, `\n![${file.name || 'pasted image'}](${reader.result})\n`);
-                reader.readAsDataURL(file);
-            });
-        });
-
         root.addEventListener('click', event => {
             const action = event.target.closest('[data-action]')?.dataset.action;
-            if (!action || action === 'import') return;
+            if (!action) return;
 
             if (action === 'add-map') {
                 mapForm.hidden = false;
@@ -446,10 +362,8 @@
             if (action === 'save-map') {
                 const name = mapNameInput.value.trim();
                 const file = mapFileInput.files[0];
-                if (!name || !file) {
-                    saveState.textContent = 'City name and image required';
-                    return;
-                }
+                if (!name || !file) return;
+
                 const reader = new FileReader();
                 reader.onload = () => {
                     const mapItem = {
@@ -468,13 +382,8 @@
                     mapFileInput.value = '';
                     resetMapView();
                     render();
-                    saveState.textContent = `${name} map added`;
                 };
                 reader.readAsDataURL(file);
-            }
-
-            if (action === 'new') {
-                createNote(50, 50);
             }
 
             if (action === 'zoom-in') {
@@ -488,57 +397,10 @@
             if (action === 'zoom-reset') {
                 resetMapView();
             }
-
-            if (action === 'delete') {
-                notes = notes.filter(note => note.id !== activeId);
-                activeId = notes[0] ? notes[0].id : null;
-                previewMode = false;
-                persist('Point deleted');
-                render();
-            }
-
-            if (action === 'preview') {
-                previewMode = true;
-                renderEditor();
-            }
-
-            if (action === 'edit') {
-                previewMode = false;
-                renderEditor();
-            }
-
-            if (action === 'export') {
-                const blob = new Blob([JSON.stringify(notes, null, 2)], { type: 'application/json' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'map-notes.json';
-                link.click();
-                URL.revokeObjectURL(link.href);
-            }
         });
 
-        importInput.addEventListener('change', () => {
-            const file = importInput.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    const imported = JSON.parse(reader.result);
-                    if (!Array.isArray(imported)) throw new Error('Invalid notes');
-                    notes = imported
-                        .filter(note => note && typeof note === 'object')
-                        .map(normalizeNote);
-                    activeId = currentNotes()[0]?.id || null;
-                    previewMode = false;
-                    persist('Imported');
-                    render();
-                } catch {
-                    saveState.textContent = 'Import failed';
-                }
-                importInput.value = '';
-            };
-            reader.readAsText(file);
-        });
+        window.addEventListener('resize', applyMapTransform);
+        mapImage.addEventListener('load', positionPopup);
 
         applyMapTransform();
         render();

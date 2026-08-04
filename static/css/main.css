@@ -110,14 +110,10 @@ section .main-body{
 }
 
 .map-notes-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
-    gap: 1.5rem;
-    align-items: stretch;
+    display: block;
 }
 
-.map-notes-map-panel,
-.map-note-editor {
+.map-notes-map-panel {
     min-width: 0;
 }
 
@@ -222,7 +218,7 @@ section .main-body{
     border: 1px solid #c8d2e1;
     border-radius: 0.5rem;
     background: #d7e5ed;
-    cursor: crosshair;
+    cursor: grab;
     box-shadow: 0 1rem 2.5rem rgba(22, 34, 70, 0.08);
     touch-action: none;
 }
@@ -283,12 +279,114 @@ section .main-body{
     font-size: 1.7rem;
     line-height: 1;
     transform: translate(-50%, -88%);
+    transform-origin: 50% 88%;
+    transition: color 0.18s ease, filter 0.18s ease, transform 0.18s ease;
     pointer-events: auto;
 }
 
 .map-note-marker.active {
     color: var(--bs-blue);
-    filter: drop-shadow(0 0.25rem 0.35rem rgba(41, 55, 240, 0.28));
+    filter: drop-shadow(0 0.35rem 0.45rem rgba(41, 55, 240, 0.34));
+    transform: translate(-50%, -88%) scale(1.24);
+    animation: map-marker-pulse 1.35s ease-in-out infinite;
+}
+
+@keyframes map-marker-pulse {
+    0%, 100% {
+        filter: drop-shadow(0 0.35rem 0.45rem rgba(41, 55, 240, 0.34));
+    }
+
+    50% {
+        filter: drop-shadow(0 0.45rem 0.75rem rgba(41, 55, 240, 0.5));
+    }
+}
+
+.map-note-popup {
+    position: absolute;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.7rem;
+    width: min(17rem, calc(100% - 1rem));
+    padding: 0.65rem;
+    border: 1px solid rgba(92, 113, 139, 0.22);
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 1rem 2rem rgba(22, 34, 70, 0.18);
+    transform: translate(0.85rem, calc(-100% - 0.8rem));
+    pointer-events: auto;
+}
+
+.map-note-popup.flip-x {
+    transform: translate(calc(-100% - 0.85rem), calc(-100% - 0.8rem));
+}
+
+.map-note-popup.flip-y {
+    transform: translate(0.85rem, 0.8rem);
+}
+
+.map-note-popup.flip-x.flip-y {
+    transform: translate(calc(-100% - 0.85rem), 0.8rem);
+}
+
+.map-note-popup::after {
+    content: "";
+    position: absolute;
+    left: -0.42rem;
+    bottom: 0.75rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-left: 1px solid rgba(92, 113, 139, 0.22);
+    border-bottom: 1px solid rgba(92, 113, 139, 0.22);
+    background: rgba(255, 255, 255, 0.94);
+    transform: rotate(45deg);
+}
+
+.map-note-popup.flip-x::after {
+    right: -0.42rem;
+    left: auto;
+    border-right: 1px solid rgba(92, 113, 139, 0.22);
+    border-bottom: 1px solid rgba(92, 113, 139, 0.22);
+    border-left: 0;
+}
+
+.map-note-popup.flip-y::after {
+    top: 0.75rem;
+    bottom: auto;
+}
+
+.map-note-popup img {
+    width: 5rem;
+    height: 3.75rem;
+    border-radius: 0.35rem;
+    object-fit: cover;
+}
+
+.map-note-popup-content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+.map-note-popup-content strong {
+    overflow: hidden;
+    color: #1f2937;
+    font-size: 0.98rem;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.map-note-popup-content span {
+    display: -webkit-box;
+    overflow: hidden;
+    color: #687387;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .map-note-list {
@@ -328,103 +426,9 @@ section .main-body{
     box-shadow: inset 3px 0 0 var(--bs-blue);
 }
 
-.map-note-editor {
-    display: flex;
-    min-height: 36rem;
-    padding: 1rem;
-    border: 1px solid #d6dde7;
-    border-radius: 0.5rem;
-    background: #ffffff;
-    box-shadow: 0 1rem 2.5rem rgba(22, 34, 70, 0.06);
-}
-
-.map-note-form {
-    display: flex;
-    flex: 1;
-    min-height: 0;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.map-note-empty {
-    display: grid;
-    width: 100%;
-    place-items: center;
-    color: #687387;
-    font-size: 1rem;
-    text-align: center;
-}
-
-.map-note-meta {
-    display: flex;
-    gap: 0.7rem;
-}
-
-.map-note-meta input {
-    flex: 1;
-    min-width: 0;
-    height: 2.5rem;
-    padding: 0 0.85rem;
-    border: 1px solid #c8d2e1;
-    border-radius: 0.4rem;
-    font-weight: 700;
-}
-
-.map-note-coordinates {
-    color: #687387;
-    font-size: 0.9rem;
-}
-
-.map-note-form textarea {
-    flex: 1;
-    min-height: 19rem;
-    padding: 0.9rem;
-    border: 1px solid #c8d2e1;
-    border-radius: 0.4rem;
-    font: 0.98rem/1.65 Consolas, "Liberation Mono", monospace;
-    resize: vertical;
-}
-
-.map-note-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.6rem;
-}
-
-.map-note-actions span {
-    margin-right: auto;
-    color: #687387;
-    font-size: 0.85rem;
-}
-
-.map-note-preview {
-    flex: 1;
-    overflow: auto;
-    min-height: 19rem;
-    padding: 1rem;
-    border: 1px solid #c8d2e1;
-    border-radius: 0.4rem;
-    background: #fbfcff;
-}
-
-.map-note-preview img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 0.35rem;
-}
-
 @media screen and (max-width: 991px) {
-    .map-notes-shell {
-        grid-template-columns: 1fr;
-    }
-
     .map-add-form {
         grid-template-columns: 1fr;
-    }
-
-    .map-note-editor {
-        min-height: 30rem;
     }
 }
 
@@ -433,13 +437,24 @@ section .main-body{
         grid-template-columns: 1fr;
     }
 
-    .map-note-actions {
-        align-items: stretch;
-        flex-wrap: wrap;
+    .map-note-popup {
+        grid-template-columns: 4rem minmax(0, 1fr);
+        width: min(14rem, calc(100% - 1rem));
     }
 
-    .map-note-actions span {
-        flex-basis: 100%;
+    .map-note-popup img {
+        width: 4rem;
+        height: 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .map-note-marker {
+        transition: none;
+    }
+
+    .map-note-marker.active {
+        animation: none;
     }
 }
 

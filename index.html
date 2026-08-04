@@ -171,9 +171,6 @@
                         <button class="map-note-button text-button" type="button" data-action="cancel-map">Cancel</button>
                     </div>
                     <div class="map-notes-toolbar" aria-label="Map note actions">
-                        <button class="map-note-button" type="button" data-action="new" title="New note">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
                         <button class="map-note-button" type="button" data-action="zoom-in" title="Zoom in">
                             <i class="bi bi-zoom-in"></i>
                         </button>
@@ -183,41 +180,16 @@
                         <button class="map-note-button" type="button" data-action="zoom-reset" title="Reset map view">
                             <i class="bi bi-arrows-fullscreen"></i>
                         </button>
-                        <button class="map-note-button" type="button" data-action="export" title="Export notes">
-                            <i class="bi bi-download"></i>
-                        </button>
-                        <label class="map-note-button" title="Import notes">
-                            <i class="bi bi-upload"></i>
-                            <input class="visually-hidden" type="file" accept="application/json" data-action="import">
-                        </label>
                     </div>
                     <div class="offline-map" data-map aria-label="Offline map image for choosing note points">
                         <div class="offline-map-canvas" data-map-canvas>
                             <img class="offline-map-image" data-map-image alt="Offline map">
                             <div class="map-note-markers" data-markers></div>
                         </div>
+                        <div class="map-note-popup" data-note-popup hidden></div>
                     </div>
                     <div class="map-note-list" data-list></div>
                 </div>
-                <article class="map-note-editor" data-editor>
-                    <div class="map-note-empty" data-empty>Select a point or click the map to begin.</div>
-                    <div class="map-note-form" data-form hidden>
-                        <div class="map-note-meta">
-                            <input type="text" data-title placeholder="Note title">
-                            <button class="map-note-button danger" type="button" data-action="delete" title="Delete note">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                        <div class="map-note-coordinates" data-coordinates></div>
-                        <textarea data-body spellcheck="true" placeholder="Write with Markdown. Paste an image directly here."></textarea>
-                        <div class="map-note-actions">
-                            <span data-save-state>Saved locally</span>
-                            <button class="map-note-button text-button" type="button" data-action="preview">Preview</button>
-                            <button class="map-note-button text-button" type="button" data-action="edit">Edit</button>
-                        </div>
-                        <div class="map-note-preview main-body" data-preview hidden></div>
-                    </div>
-                </article>
             </div>
         </div>
     </section>

@@ -6,9 +6,9 @@ Runtime data files:
 
 - City map library: `static/data/maps/map-library.json`
 - Default marker notes: `static/data/maps/map-notes.json`
-- Built-in Fuzhou map image: `static/map/images/fuzhou.jpeg`
+- Built-in map images: `static/map/images/`
 
-The website also saves edits in browser `localStorage`. To publish edited notes permanently, export `map-notes.json` from the website and replace `static/data/maps/map-notes.json`.
+The website reads marker notes from `static/data/maps/map-notes.json`. Marker articles are managed in code, not edited in the website UI.
 
 ## City: 福州
 
@@ -67,6 +67,7 @@ Each marker in `static/data/maps/map-notes.json` uses this shape:
   "y": 18.24,
   "title": "西湖公园",
   "body": "好玩，有很多小动物\n\n",
+  "previewImage": "static/map/images/fuzhou.jpeg",
   "updatedAt": 1785476346625
 }
 ```
@@ -79,6 +80,7 @@ Field guide:
 - `y`: vertical position on the map image, in percent from top to bottom.
 - `title`: marker name shown in the website list.
 - `body`: Markdown article content for the marker.
+- `previewImage`: optional small image shown in the marker popup. If omitted, the website uses the first Markdown image in `body`; if no article image exists, it falls back to the city map image.
 - `updatedAt`: update timestamp in milliseconds.
 
 ## Adding Another City In Code
@@ -125,6 +127,7 @@ Example:
   "y": 50,
   "title": "示例地点",
   "body": "这里写 Markdown 文章内容。\n\n",
+  "previewImage": "static/map/images/beijing-place.jpeg",
   "updatedAt": 1785477000000
 }
 ```
@@ -159,7 +162,9 @@ Notes file: `static/data/maps/map-notes.json`
 2. Add a new note object to `static/data/maps/map-notes.json`.
 3. Set the note's `mapId` to that city `id`.
 4. Set `x` and `y` from the website export, or estimate them as image percentages.
-5. Add the marker row to this document.
+5. Write the article in `body`. Markdown image syntax is supported, for example `![照片](static/map/articles/bund-night.jpeg)`.
+6. Add `previewImage` if you want the popup thumbnail to use a specific image.
+7. Add the marker row to this document.
 
 For example, adding a new Shanghai marker must use:
 
