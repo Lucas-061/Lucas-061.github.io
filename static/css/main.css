@@ -386,13 +386,12 @@ section .main-body{
 }
 
 .map-note-popup-content span {
-    display: -webkit-box;
+    display: block;
     overflow: hidden;
     color: #687387;
     font-size: 1rem;
     line-height: 1.45;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    white-space: pre-line;
 }
 
 .map-note-list {

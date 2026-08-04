@@ -94,7 +94,8 @@
         return String(body || '')
             .replace(/!\[[^\]]*]\([^)]+\)/g, '')
             .replace(/[#>*_`~\-[\]()]/g, '')
-            .replace(/\s+/g, ' ')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{3,}/g, '\n\n')
             .trim();
     }
 
