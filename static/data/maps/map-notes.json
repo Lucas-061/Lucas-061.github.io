@@ -7,7 +7,7 @@
     "title": "西湖公园",
     "body": "好玩，成功抓拍小鹅展翅\n\n",
     
-    "updatedAt": 1785476346625
+    "updatedAt": 20260718
   },
   {
     "id": "note-fuzhou-002",
@@ -17,7 +17,7 @@
     "title": "免费运动场",
     "body": "定时免费\n篮球、乒乓球、羽毛球、排球、足球",
     "previewImage": "static/map/photos/ydc.jpg",
-    "updatedAt": 1785476369460
+    "updatedAt": 20260712.2
   },
   {
     "id": "note-fuzhou-003",
@@ -26,7 +26,7 @@
     "y": 24.38503620807263,
     "title": "三坊七巷",
     "body": "榕树\n\n",
-    "updatedAt": 1785476553451
+    "updatedAt": 20260725
   },
   {
     "id": "note-fuzhou-004",
@@ -36,7 +36,7 @@
     "title": "乌龙江湿地公园",
     "body": "沿江跑道很长\n\n",
     "previewImage": "static/map/photos/wljgy.jpg",
-    "updatedAt": 1785476547799
+    "updatedAt": 20260719
   },
   {
     "id": "note-fuzhou-005",
@@ -45,7 +45,7 @@
     "y": 49.42448247310804,
     "title": "旗山湖公园",
     "body": "逛了一圈\n",
-    "updatedAt": 1785476617629
+    "updatedAt": 20260712.1
   },
   {
     "id": "note-fuzhou-006",
@@ -54,7 +54,7 @@
     "y": 24.59,
     "title": "国光公园",
     "body": "很多人拍照\n",
-    "updatedAt": 1785476617629
+    "updatedAt": 20260801.1
   },
     {
     "id": "note-fuzhou-007",
@@ -63,7 +63,7 @@
     "y": 22.37,
     "title": "福道",
     "body": "下雨凉快，蜿蜒曲折的栈道\n",
-    "updatedAt": 1785476617629
+    "updatedAt": 20260801.2
   },
 
 
@@ -76,7 +76,8 @@
   "title": "外滩",
   "body": "做最优质的战士\n\n",
   "previewImage": "static/map/photos/dfmz.jpg",
-  "updatedAt": 1785477000001
+  "audioSrc": "static/music/Battlefield 4 Warsaw Theme.mp3",
+  "updatedAt": 20250809
   },
   {
   "id": "note-shanghai-002",
@@ -85,7 +86,7 @@
   "y": 66.26,
   "title": "菜饭骨头汤",
   "body": "鸡腿饭绝了\n\n",
-  "updatedAt": 1785477000002
+  "updatedAt": 20250803
   },
 
 
@@ -97,7 +98,8 @@
   "y": 56.81,
   "title": "三中",
   "body": "青三\n\n",
-  "updatedAt": 1785477000001
+  "previewImage": "static/map/photos/qs.jpg",
+  "updatedAt": 2020
   },
   {
   "id": "note-nanning-002",
@@ -106,6 +108,7 @@
   "y": 46.49,
   "title": "邕味老友",
   "body": "猪杂老友粉值得一试\n\n",
-  "updatedAt": 1785477000001
+  "previewImage": "static/map/photos/ywly.jpg",
+  "updatedAt": 2025
   }
 ]

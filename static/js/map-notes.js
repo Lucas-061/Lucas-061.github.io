@@ -61,10 +61,6 @@
         };
     }
 
-    function saveCustomMaps(maps) {
-        localStorage.setItem(mapStorageKey, JSON.stringify(maps.filter(map => !map.builtin)));
-    }
-
     function normalizeNote(note, index) {
         if (!note || typeof note !== 'object') return null;
         const lngX = Number.isFinite(note.lng) ? ((note.lng + 180) / 360) * 100 : 50;
@@ -77,6 +73,7 @@
             title: note.title || 'Untitled note',
             body: note.body || '',
             previewImage: note.previewImage || '',
+            audioSrc: note.audioSrc || '',
             updatedAt: note.updatedAt || Date.now()
         };
     }
@@ -107,9 +104,9 @@
         const mapCanvas = root.querySelector('[data-map-canvas]');
         const mapImage = root.querySelector('[data-map-image]');
         const mapTabs = root.querySelector('[data-map-tabs]');
-        const mapForm = root.querySelector('[data-map-form]');
-        const mapNameInput = root.querySelector('[data-map-name]');
-        const mapFileInput = root.querySelector('[data-map-file]');
+        const coordinatePicker = root.querySelector('[data-coordinate-picker]');
+        const coordinateStatus = root.querySelector('[data-coordinate-status]');
+        const coordinateOutput = root.querySelector('[data-coordinate-output]');
         const markerLayer = root.querySelector('[data-markers]');
         const list = root.querySelector('[data-list]');
         const popup = root.querySelector('[data-note-popup]');
@@ -127,6 +124,10 @@
         let mapPanY = 0;
         let dragStart = null;
         let suppressNextClick = false;
+        let pickingPoint = false;
+        let pickedPoint = null;
+        let activeAudio = null;
+        let activeAudioId = null;
 
         function activeMap() {
             return maps.find(mapItem => mapItem.id === activeMapId) || builtinMap;
@@ -142,6 +143,42 @@
 
         function getPreviewImage(note) {
             return note.previewImage || findFirstMarkdownImage(note.body) || activeMap().src;
+        }
+
+        function stopAudio() {
+            if (!activeAudio) return;
+            activeAudio.pause();
+            activeAudio.currentTime = 0;
+            activeAudio = null;
+            activeAudioId = null;
+            renderList();
+        }
+
+        function toggleAudio(note) {
+            if (!note.audioSrc) return;
+
+            if (activeAudio && activeAudioId === note.id) {
+                stopAudio();
+                return;
+            }
+
+            if (activeAudio) {
+                activeAudio.pause();
+                activeAudio.currentTime = 0;
+            }
+
+            activeAudio = new Audio(note.audioSrc);
+            activeAudioId = note.id;
+            activeAudio.addEventListener('ended', () => {
+                activeAudio = null;
+                activeAudioId = null;
+                renderList();
+            });
+            activeAudio.play().then(renderList).catch(() => {
+                activeAudio = null;
+                activeAudioId = null;
+                renderList();
+            });
         }
 
         function renderMapTabs() {
@@ -202,6 +239,37 @@
             applyMapTransform();
         }
 
+        function getMapPoint(event) {
+            const rect = map.getBoundingClientRect();
+            const x = ((event.clientX - rect.left - mapPanX) / mapScale / rect.width) * 100;
+            const y = ((event.clientY - rect.top - mapPanY) / mapScale / rect.height) * 100;
+            return { x: clamp(x, 0, 100), y: clamp(y, 0, 100) };
+        }
+
+        function formatPointForCode(point) {
+            return `"x": ${point.x.toFixed(2)}, "y": ${point.y.toFixed(2)}`;
+        }
+
+        function setPickingPoint(enabled) {
+            pickingPoint = enabled;
+            if (enabled) {
+                pickedPoint = null;
+                activeId = null;
+                popup.hidden = true;
+                popup.replaceChildren();
+                coordinatePicker.hidden = false;
+                coordinateStatus.textContent = 'Click the map to choose a marker position.';
+                coordinateOutput.textContent = '';
+                map.classList.add('picking');
+            } else {
+                pickedPoint = null;
+                coordinatePicker.hidden = true;
+                coordinateOutput.textContent = '';
+                map.classList.remove('picking');
+            }
+            render();
+        }
+
         function renderMarkers() {
             markerLayer.innerHTML = '';
             currentNotes().forEach(note => {
@@ -219,6 +287,15 @@
                 });
                 markerLayer.appendChild(button);
             });
+
+            if (pickedPoint) {
+                const marker = document.createElement('div');
+                marker.className = 'map-note-marker map-note-marker-draft active';
+                marker.style.left = `${pickedPoint.x}%`;
+                marker.style.top = `${pickedPoint.y}%`;
+                marker.innerHTML = `<i class="bi bi-geo-alt-fill"></i><span class="map-draft-coordinate">${formatCoordinate(pickedPoint)}</span>`;
+                markerLayer.appendChild(marker);
+            }
         }
 
         function renderList() {
@@ -227,15 +304,34 @@
                 .slice()
                 .sort((a, b) => b.updatedAt - a.updatedAt)
                 .forEach(note => {
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = `map-note-list-item${note.id === activeId ? ' active' : ''}`;
-                    button.innerHTML = `<strong>${note.title || 'Untitled note'}</strong><span>${formatCoordinate(note)}</span>`;
-                    button.addEventListener('click', () => {
+                    const item = document.createElement('div');
+                    item.className = `map-note-list-item${note.id === activeId ? ' active' : ''}`;
+
+                    const selectButton = document.createElement('button');
+                    selectButton.type = 'button';
+                    selectButton.className = 'map-note-list-select';
+                    selectButton.innerHTML = `<strong>${note.title || 'Untitled note'}</strong><span>${formatCoordinate(note)}</span>`;
+                    selectButton.addEventListener('click', () => {
                         activeId = note.id;
                         render();
                     });
-                    list.appendChild(button);
+                    item.appendChild(selectButton);
+
+                    if (note.audioSrc) {
+                        const audioButton = document.createElement('button');
+                        const isPlaying = activeAudioId === note.id;
+                        audioButton.type = 'button';
+                        audioButton.className = `map-note-audio-button${isPlaying ? ' playing' : ''}`;
+                        audioButton.title = isPlaying ? 'Pause music' : 'Play music';
+                        audioButton.innerHTML = `<i class="bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}"></i>`;
+                        audioButton.addEventListener('click', event => {
+                            event.stopPropagation();
+                            toggleAudio(note);
+                        });
+                        item.appendChild(audioButton);
+                    }
+
+                    list.appendChild(item);
                 });
         }
 
@@ -301,6 +397,18 @@
                 suppressNextClick = false;
                 return;
             }
+
+            if (pickingPoint) {
+                if (event.target.closest('[data-note-popup]')) return;
+                pickedPoint = getMapPoint(event);
+                pickingPoint = false;
+                coordinateStatus.textContent = 'Selected coordinate:';
+                coordinateOutput.textContent = formatPointForCode(pickedPoint);
+                map.classList.remove('picking');
+                render();
+                return;
+            }
+
             if (event.target.closest('.map-note-marker') || event.target.closest('[data-note-popup]')) return;
             activeId = null;
             render();
@@ -351,42 +459,12 @@
             const action = event.target.closest('[data-action]')?.dataset.action;
             if (!action) return;
 
-            if (action === 'add-map') {
-                mapForm.hidden = false;
-                mapNameInput.focus();
+            if (action === 'pick-point') {
+                setPickingPoint(true);
             }
 
-            if (action === 'cancel-map') {
-                mapForm.hidden = true;
-                mapNameInput.value = '';
-                mapFileInput.value = '';
-            }
-
-            if (action === 'save-map') {
-                const name = mapNameInput.value.trim();
-                const file = mapFileInput.files[0];
-                if (!name || !file) return;
-
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const mapItem = {
-                        id: `map-${Date.now()}-${Math.round(Math.random() * 1000)}`,
-                        name,
-                        src: reader.result,
-                        builtin: false
-                    };
-                    maps.push(mapItem);
-                    saveCustomMaps(maps);
-                    activeMapId = mapItem.id;
-                    localStorage.setItem(activeMapStorageKey, activeMapId);
-                    activeId = null;
-                    mapForm.hidden = true;
-                    mapNameInput.value = '';
-                    mapFileInput.value = '';
-                    resetMapView();
-                    render();
-                };
-                reader.readAsDataURL(file);
+            if (action === 'cancel-pick') {
+                setPickingPoint(false);
             }
 
             if (action === 'zoom-in') {

@@ -152,7 +152,7 @@
 
     <!-- Map Notes -->
     <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="map-notes">
-        <div class="container px-5">
+        <div class="container-fluid px-4 map-notes-container">
             <header>
                 <h2 id="map-notes-subtitle"><i class="bi bi-geo-alt-fill"></i>&nbsp;MAP NOTES</h2>
             </header>
@@ -160,15 +160,14 @@
                 <div class="map-notes-map-panel">
                     <div class="map-library-bar">
                         <div class="map-city-tabs" data-map-tabs aria-label="City maps"></div>
-                        <button class="map-note-button" type="button" data-action="add-map" title="Add city map">
+                        <button class="map-note-button" type="button" data-action="pick-point" title="Pick marker coordinates">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
-                    <div class="map-add-form" data-map-form hidden>
-                        <input type="text" data-map-name placeholder="City name">
-                        <input type="file" data-map-file accept="image/*,.svg">
-                        <button class="map-note-button text-button" type="button" data-action="save-map">Add</button>
-                        <button class="map-note-button text-button" type="button" data-action="cancel-map">Cancel</button>
+                    <div class="map-coordinate-picker" data-coordinate-picker hidden>
+                        <span data-coordinate-status>Click the map to choose a marker position.</span>
+                        <code data-coordinate-output></code>
+                        <button class="map-note-button text-button" type="button" data-action="cancel-pick">Cancel</button>
                     </div>
                     <div class="map-notes-toolbar" aria-label="Map note actions">
                         <button class="map-note-button" type="button" data-action="zoom-in" title="Zoom in">
@@ -181,14 +180,16 @@
                             <i class="bi bi-arrows-fullscreen"></i>
                         </button>
                     </div>
-                    <div class="offline-map" data-map aria-label="Offline map image for choosing note points">
-                        <div class="offline-map-canvas" data-map-canvas>
-                            <img class="offline-map-image" data-map-image alt="Offline map">
-                            <div class="map-note-markers" data-markers></div>
+                    <div class="map-notes-view">
+                        <div class="offline-map" data-map aria-label="Offline map image for choosing note points">
+                            <div class="offline-map-canvas" data-map-canvas>
+                                <img class="offline-map-image" data-map-image alt="Offline map">
+                                <div class="map-note-markers" data-markers></div>
+                            </div>
+                            <div class="map-note-popup" data-note-popup hidden></div>
                         </div>
-                        <div class="map-note-popup" data-note-popup hidden></div>
+                        <div class="map-note-list" data-list></div>
                     </div>
-                    <div class="map-note-list" data-list></div>
                 </div>
             </div>
         </div>
