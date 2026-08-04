@@ -40,7 +40,7 @@ Notes file: `static/data/maps/map-notes.json`
 | --- | --- | --- | --- |
 | 外滩 | `x: 48.24%`, `y: 39.43%` | 做最优质的战士 | `note-shanghai-001` |
 | 菜饭骨头汤 | `x: 85.60%`, `y: 66.26%` | 鸡腿饭绝了 | `note-shanghai-002` |
-
+| 松江站 | `x: 18.68%`, `y: 88.55%` | 大 | `note-shanghai-003` |
 
 ## City: 南宁
 
