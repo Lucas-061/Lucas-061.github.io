@@ -114,7 +114,7 @@ section .main-body{
 }
 
 .map-notes-container {
-    --map-notes-map-width: min(86rem, calc((100vh - 10rem) * 1.42));
+    --map-notes-map-width: min(76rem, calc((100vh - 10rem) * 1.42));
     --map-notes-sidebar-width: 15rem;
     --map-notes-gap: 1rem;
     max-width: 100rem;
@@ -540,12 +540,6 @@ section .main-body{
 }
 
 @media screen and (min-width: 992px) {
-    .map-notes-container header {
-        width: min(100%, var(--map-notes-map-width));
-        margin-right: auto;
-        margin-left: auto;
-    }
-
     .map-notes-map-panel {
         display: block;
     }
