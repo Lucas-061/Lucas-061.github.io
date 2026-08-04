@@ -276,8 +276,10 @@
             const rect = map.getBoundingClientRect();
             const x = (note.x / 100) * rect.width * mapScale + mapPanX;
             const y = (note.y / 100) * rect.height * mapScale + mapPanY;
-            const nearRightEdge = x > rect.width - 260;
-            const nearTopEdge = y < 130;
+            const popupWidth = popup.offsetWidth || 272;
+            const popupHeight = popup.offsetHeight || 120;
+            const nearRightEdge = x > rect.width - popupWidth - 16;
+            const nearTopEdge = y < popupHeight + 16;
 
             popup.classList.toggle('flip-x', nearRightEdge);
             popup.classList.toggle('flip-y', nearTopEdge);
