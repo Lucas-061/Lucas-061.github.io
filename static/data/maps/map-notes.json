@@ -15,7 +15,7 @@
     "x": 15.885702673468046,
     "y": 46.7939488585588,
     "title": "免费运动场",
-    "body": "定时免费\n篮球、乒乓球、羽毛球、排球、足球",
+    "body": "篮球、乒乓球、羽毛球、排球、足球\n晚上打乒乓球到10点，有个老叔很会引导，印象深刻",
     "previewImage": "static/map/photos/ydc.jpg",
     "updatedAt": 20260712.2
   },
@@ -56,7 +56,7 @@
     "body": "很多人拍照\n",
     "updatedAt": 20260801.1
   },
-    {
+  {
     "id": "note-fuzhou-007",
     "mapId": "fuzhou",
     "x": 34.92,
@@ -64,6 +64,24 @@
     "title": "福道",
     "body": "下雨凉快，蜿蜒曲折的栈道\n",
     "updatedAt": 20260801.2
+  },
+  {
+    "id": "note-fuzhou-008",
+    "mapId": "fuzhou",
+    "x": 50.98,
+    "y": 29.10,
+    "title": "五一广场",
+    "body": "热闹\n",
+    "updatedAt": 20260809.1
+  },
+  {
+    "id": "note-fuzhou-009",
+    "mapId": "fuzhou",
+    "x": 50.62,
+    "y": 27.65,
+    "title": "于山公园",
+    "body": "满山绿荫，抗战岁月\n",
+    "updatedAt": 20260809.2
   },
 
 
