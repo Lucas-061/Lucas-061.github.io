@@ -5,9 +5,9 @@
     "x": 43.93043267440897,
     "y": 18.236141976362145,
     "title": "西湖公园",
-    "body": "好玩，成功抓拍小鹅展翅\n\n",
-    
-    "updatedAt": 20260718
+    "updatedAt": 20260718,
+    "previewImage": "static/map/photos/xhgy2.jpg",
+    "body": "去了3次\n好玩，成功抓拍小鹅展翅\n\n"
   },
   {
     "id": "note-fuzhou-002",
@@ -15,9 +15,9 @@
     "x": 15.885702673468046,
     "y": 46.7939488585588,
     "title": "免费运动场",
-    "body": "篮球、乒乓球、羽毛球、排球、足球\n晚上打乒乓球到10点，有个老叔很会引导，印象深刻",
+    "updatedAt": 20260712.2,
     "previewImage": "static/map/photos/ydc.jpg",
-    "updatedAt": 20260712.2
+    "body": "篮球、乒乓球、羽毛球、排球、足球\n晚上打乒乓球到10点，有个老叔很会引导，印象深刻"
   },
   {
     "id": "note-fuzhou-003",
@@ -25,8 +25,10 @@
     "x": 46.59407756473231,
     "y": 24.38503620807263,
     "title": "三坊七巷",
-    "body": "榕树\n\n",
-    "updatedAt": 20260725
+    "updatedAt": 20260725,
+    "previewImage": "static/map/photos/sfqx.jpg",
+    "body": "辟谷榕树\n\n"
+    
   },
   {
     "id": "note-fuzhou-004",
@@ -34,9 +36,10 @@
     "x": 26.19518256889205,
     "y": 57.1662079450458,
     "title": "乌龙江湿地公园",
-    "body": "沿江跑道很长\n\n",
+    "updatedAt": 20260719,
     "previewImage": "static/map/photos/wljgy.jpg",
-    "updatedAt": 20260719
+    "body": "沿江跑道很长\n\n"
+    
   },
   {
     "id": "note-fuzhou-005",
@@ -44,8 +47,10 @@
     "x": 8.884063305115937,
     "y": 49.42448247310804,
     "title": "旗山湖公园",
-    "body": "逛了一圈\n",
-    "updatedAt": 20260712.1
+    "updatedAt": 20260712.1,
+    "previewImage": "static/map/photos/qshgy.jpg",
+    "body": "逛了一圈\n"
+    
   },
   {
     "id": "note-fuzhou-006",
@@ -53,8 +58,10 @@
     "x": 29.88,
     "y": 24.59,
     "title": "国光公园",
-    "body": "很多人拍照\n",
-    "updatedAt": 20260801.1
+    "updatedAt": 20260801.1,
+    "previewImage": "static/map/photos/gggy.jpg",
+    "body": "很多人拍照\n"
+    
   },
   {
     "id": "note-fuzhou-007",
@@ -62,8 +69,10 @@
     "x": 34.92,
     "y": 22.37,
     "title": "福道",
-    "body": "下雨凉快，蜿蜒曲折的栈道\n",
-    "updatedAt": 20260801.2
+    "updatedAt": 20260801.2,
+    "previewImage": "static/map/photos/fudao.jpg",
+    "body": "下雨凉快，蜿蜒曲折的栈道\n"
+    
   },
   {
     "id": "note-fuzhou-008",
@@ -71,8 +80,10 @@
     "x": 50.98,
     "y": 29.10,
     "title": "五一广场",
-    "body": "热闹\n",
-    "updatedAt": 20260809.1
+    "updatedAt": 20260809.1,
+    "previewImage": "static/map/photos/wygc.jpg",
+    "body": "\n"
+    
   },
   {
     "id": "note-fuzhou-009",
@@ -80,8 +91,21 @@
     "x": 50.62,
     "y": 27.65,
     "title": "于山公园",
-    "body": "满山绿荫，抗战岁月\n",
-    "updatedAt": 20260809.2
+    "updatedAt": 20260809.2,
+    "previewImage": "static/map/photos/ysgy.jpg",
+    "body": "满山绿荫，抗战岁月\n"
+    
+  },
+  {
+    "id": "note-fuzhou-010",
+    "mapId": "fuzhou",
+    "x": 42.54,
+    "y": 16.85,
+    "title": "福建博物院",
+    "updatedAt": 20260816,
+    "previewImage": "static/map/photos/fjbwy.jpg",
+    "body": "圆明园马头，为了印章 花35块买了本子\n自然馆、艺术馆"
+    
   },
 
 
@@ -92,10 +116,11 @@
   "x": 48.24,
   "y": 39.43,
   "title": "外滩",
-  "body": "做最优质的战士\n\n",
+  "updatedAt": 20250809,
   "previewImage": "static/map/photos/dfmz.jpg",
   "audioSrc": "static/music/Battlefield 4 Warsaw Theme.mp3",
-  "updatedAt": 20250809
+  "body": "做最优质的战士\n\n"
+  
   },
   {
   "id": "note-shanghai-002",
@@ -103,8 +128,10 @@
   "x": 85.60,
   "y": 66.26,
   "title": "菜饭骨头汤",
-  "body": "鸡腿饭绝了\n\n",
-  "updatedAt": 20250803
+  "updatedAt": 20250803,
+  "previewImage": "static/map/photos/cfgtt.jpg",
+  "body": "鸡腿饭绝了\n\n"
+  
   },
   {
   "id": "note-shanghai-003",
@@ -112,8 +139,10 @@
   "x": 18.68,
   "y": 88.55,
   "title": "松江站",
-  "body": "大\n\n",
-  "updatedAt": 20250810
+  "updatedAt": 20250810,
+  "previewImage": "static/map/photos/sjz.jpg",
+  "body": "大\n\n"
+  
   },
 
 
@@ -123,9 +152,9 @@
   "x": 53.77,
   "y": 56.81,
   "title": "三中",
-  "body": "青三\n\n",
+  "updatedAt": 2020,
   "previewImage": "static/map/photos/qs.jpg",
-  "updatedAt": 2020
+  "body": "青三\n\n"
   },
   {
   "id": "note-nanning-002",
@@ -133,8 +162,8 @@
   "x": 31.10,
   "y": 46.49,
   "title": "邕味老友",
-  "body": "猪杂老友粉值得一试\n\n",
+  "updatedAt": 2025,
   "previewImage": "static/map/photos/ywly.jpg",
-  "updatedAt": 2025
+  "body": "猪杂老友粉值得一试\n\n"
   }
 ]
