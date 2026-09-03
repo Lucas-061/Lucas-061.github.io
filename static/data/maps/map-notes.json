@@ -107,7 +107,17 @@
     "body": "圆明园马头，为了印章 花35块买了本子\n自然馆、艺术馆"
     
   },
-
+  {
+    "id": "note-fuzhou-011",
+    "mapId": "fuzhou",
+    "x": 80.75,
+    "y": 45.65,
+    "title": "鼓山",
+    "updatedAt": 20260830,
+    "previewImage": "static/map/photos/gushan.jpg",
+    "body": "好"
+    
+  },
 
 
   {

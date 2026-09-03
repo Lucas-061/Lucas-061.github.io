@@ -30,6 +30,8 @@ Notes file: `static/data/maps/map-notes.json`
 | 五一广场 | `x: 50.98%`, `y: 29.10%` |   | `note-fuzhou-008` |
 | 于山公园 | `x: 50.62%`, `y: 27.65%` | 满山绿荫，抗战岁月 | `note-fuzhou-009` |
 | 福建博物院 | `x: 42.54%`, `y: 16.85%` | 圆明园马头展，35买了本子只为印章\n自然馆、艺术馆 | `note-fuzhou-010` |
+| 鼓山 | `x: 80.75%`, `y: 45.65%` | 好 | `note-fuzhou-011` |
+
 
 ## City: 上海
 
